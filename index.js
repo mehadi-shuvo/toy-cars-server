@@ -69,6 +69,23 @@ async function run() {
       res.send(result)
   })
 
+  app.put('/update/:id', async(req,res)=>{
+      const id = req.params.id;
+      const updateToy = req.body;
+      console.log(updateToy)
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          price: updateToy.price,
+          available_quantity: updateToy.available_quantity,
+          details: updateToy.details
+        },
+      };
+      const result = await shopCategoryCollection.updateOne(filter, updateDoc);
+      res.send(result)
+
+  })
+
 
 
     // Send a ping to confirm a successful connection
