@@ -30,15 +30,26 @@ async function run() {
 
     const shopCategoryCollection = client.db('toyCars').collection('shopCategory');
 
-    app.get('/category', async (req, res)=>{
-      const cursor = shopCategoryCollection.find();
-      const result = await cursor.toArray()
-      res.send(result)
+    app.get('/toys', async (req, res) => { 
+      const quantity = parseInt(req.query.limit)  || 22;
+      const limit = parseInt(req.query.limit);
+      if (quantity<=3) {
+        const cursor = shopCategoryCollection.find().limit(limit);
+        const result = await cursor.toArray()
+        res.send(result)
+      }
+      else{
+        const cursor = shopCategoryCollection.find();
+        const result = await cursor.toArray()
+        console.log(result)
+        res.send(result)
+      }
+
     })
 
-    app.get('/category/:id', async (req, res)=>{
+    app.get('/toys/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await shopCategoryCollection.findOne(query);
       res.send(result)
 
@@ -55,9 +66,9 @@ run().catch(console.dir);
 
 
 
-app.get('/', (req,res)=>{
-    res.send('hello developer..!');
+app.get('/', (req, res) => {
+  res.send('hello developer..!');
 })
-app.listen(port, ()=>{
-    console.log(`this server is running on ${port} port`);
+app.listen(port, () => {
+  console.log(`this server is running on ${port} port`);
 })
