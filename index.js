@@ -55,6 +55,14 @@ async function run() {
 
     })
 
+    app.get('/my-toys', async(req, res)=>{
+      console.log(req.query.email);
+      const query = { seller_email: req.query.email}
+      const cursor = shopCategoryCollection.find(query)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
     app.post('/toys', async(req, res)=>{
       const newToy = req.body;
       const result = await shopCategoryCollection.insertOne(newToy);
