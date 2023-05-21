@@ -32,8 +32,15 @@ async function run() {
 
     app.get('/toys', async (req, res) => { 
       const quantity = parseInt(req.query.limit)  || 22;
-      const limit = parseInt(req.query.limit);
-      if (quantity<=3) {
+      let limit;
+      const primaryData = await shopCategoryCollection.find().toArray();
+      if(primaryData.length < 20){
+        limit = primaryData.length
+      }
+      else{
+       limit = parseInt(req.query.limit);
+      }
+      if (quantity<=20) {
         const cursor = shopCategoryCollection.find().limit(limit);
         const result = await cursor.toArray()
         res.send(result)
