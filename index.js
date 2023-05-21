@@ -55,10 +55,22 @@ async function run() {
     })
 
     app.get('/my-toys', async(req, res)=>{
-      const query = { seller_email: req.query.email}
+      const {email, sort} = req.query
+      const query = { seller_email: email}
       const cursor = shopCategoryCollection.find(query)
-      const result = await cursor.toArray()
-      res.send(result)
+      if(sort === ''){
+
+        const result = await cursor.toArray()
+        res.send(result)
+      }
+      else if(sort === 'high'){
+        const result = await cursor.sort({price: -1}).toArray()
+        res.send(result)
+      }
+      else if(sort === 'low'){
+        const result = await cursor.sort({price: 1}).toArray()
+        res.send(result)
+      }
     })
 
     app.get('/category-toy/:category', async(req, res)=>{
