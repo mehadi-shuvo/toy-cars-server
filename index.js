@@ -41,7 +41,6 @@ async function run() {
       else{
         const cursor = shopCategoryCollection.find();
         const result = await cursor.toArray()
-        console.log(result)
         res.send(result)
       }
 
@@ -56,11 +55,25 @@ async function run() {
     })
 
     app.get('/my-toys', async(req, res)=>{
-      console.log(req.query.email);
       const query = { seller_email: req.query.email}
       const cursor = shopCategoryCollection.find(query)
       const result = await cursor.toArray()
       res.send(result)
+    })
+
+    app.get('/category-toy/:category', async(req, res)=>{
+      const category = req.params.category;
+      const query = {subcategory: category};
+      const result = await shopCategoryCollection.find(query).toArray();
+      res.send(result)
+    })
+
+    app.get('/search', async(req,res)=>{
+      console.log(req.query.name.toLowerCase());
+      const cursor = shopCategoryCollection.find();
+      const result = await cursor.toArray();
+      const search = result.filter(searchItem=> searchItem.name.toLowerCase() === req.query.name.toLowerCase() )
+      res.send(search)
     })
 
     app.post('/toys', async(req, res)=>{
